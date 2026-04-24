@@ -1,0 +1,34 @@
+# ── Core ──────────────────────────────────────────────────────────────────────
+torch>=2.1.0
+torchvision>=0.16.0
+numpy>=1.24.0
+Pillow>=10.0.0
+opencv-python>=4.8.0
+matplotlib>=3.7.0
+scikit-learn>=1.3.0
+natsort>=8.4.0
+
+# ── Segmentation ──────────────────────────────────────────────────────────────
+# CellposeSAM (install from source)
+# git+https://www.github.com/mouseland/cellpose.git
+
+# ── Clustering / Embeddings ───────────────────────────────────────────────────
+transformers>=4.40.0
+accelerate>=0.28.0
+
+# ── Scale detection & OCR ─────────────────────────────────────────────────────
+ultralytics>=8.1.0          # YOLOv8 / YOLO12
+paddlepaddle>=2.6.0
+paddleocr>=2.8.0
+
+# ── 3D Reconstruction (Hunyuan3D-2) ──────────────────────────────────────────
+# Install separately:
+#   git clone https://github.com/Tencent-Hunyuan/Hunyuan3D-2.git
+#   cd Hunyuan3D-2 && pip install -r requirements.txt && pip install -e .
+trimesh>=4.0.0
+huggingface_hub>=0.22.0
+
+# ── Utilities ─────────────────────────────────────────────────────────────────
+gdown>=5.1.0
+ipywidgets>=8.1.0
+tqdm>=4.66.0

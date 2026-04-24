@@ -1,0 +1,30 @@
+name: nanoshape3d
+channels:
+  - pytorch
+  - nvidia
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.10
+  - pytorch>=2.1.0
+  - torchvision>=0.16.0
+  - cudatoolkit=11.8
+  - numpy
+  - pillow
+  - matplotlib
+  - scikit-learn
+  - pip
+  - pip:
+    - opencv-python
+    - natsort
+    - transformers>=4.40.0
+    - accelerate
+    - ultralytics>=8.1.0
+    - paddlepaddle
+    - paddleocr
+    - trimesh
+    - huggingface_hub
+    - gdown
+    - ipywidgets
+    - tqdm
+    - git+https://www.github.com/mouseland/cellpose.git
