@@ -9,7 +9,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![ITMO University](https://img.shields.io/badge/ITMO-Center%20for%20AI%20in%20Chemistry-red)](https://itmo.ru)
 
-*Pavel Lutskiy · Julia Razlivina — Center for AI in Chemistry, ITMO University*
+*Center for AI in Chemistry, ITMO University*
 
 </div>
 
@@ -24,12 +24,6 @@ The pipeline takes a single electron microscopy image as input and produces:
 - **RGBA cutouts** of each detected particle
 - **Clustered representatives** grouped by morphological similarity
 - **Watertight 3D meshes** (.glb) scaled to true physical dimensions in nanometres
-
-<div align="center">
-  <img src="assets/pipeline.png" alt="NanoShape3D Pipeline" width="800"/>
-  <br/>
-  <em>Full pipeline: 2D SEM/TEM image → YOLO12 scale detection → CellposeSAM segmentation → CLIP clustering → Hunyuan3D-2 3D reconstruction</em>
-</div>
 
 ---
 
@@ -52,13 +46,7 @@ The pipeline takes a single electron microscopy image as input and produces:
 NanoShape3D is composed of four sequential modules:
 
 ### 1. 🔍 Scale Detection & Physical Calibration
-A **YOLOv8** model detects the scale-bar bounding box in the micrograph. **PaddleOCR** reads the numerical value and unit (nm / µm). The two together compute the `nm/px` conversion factor passed to the 3D reconstruction stage.
-
-Diversity of scale-bar styles handled by the pipeline:
-
-<div align="center">
-  <img src="assets/scalebar_samples.png" alt="Scale bar diversity" width="600"/>
-</div>
+A **YOLOv26** model detects the scale-bar bounding box in the micrograph. **PaddleOCR** reads the numerical value and unit (nm / µm). The two together compute the `nm/px` conversion factor passed to the 3D reconstruction stage.
 
 ### 2. 🧩 Instance Segmentation (CellposeSAM)
 A domain-adapted **CellposeSAM** model (Cellpose topology + SAM zero-shot features) segments individual nanoparticles, including touching and heavily overlapping configurations where standard watershed methods fail. Fine-tuned on 550 manually annotated SEM/TEM micrographs via CVAT.
@@ -77,16 +65,31 @@ A domain-adapted **CellposeSAM** model (Cellpose topology + SAM zero-shot featur
 ## Repository Structure
 
 ```
-nanoshape3d/
+NanoShape3D/
+├── artifacts/
+│   ├── output_test_paddle/
+│      └── ....
+│   ├── ob_5_turbo.glb
+│   ├── obj_2.png
+│   ├── obj_5.png
+│   └── restored.png     
 ├── notebooks/
-│   └── nanoshape3d.ipynb      # Main end-to-end pipeline notebook (Kaggle / Colab)
-├── assets/
-│   ├── pipeline.png           # Architecture diagram
-│   └── scalebar_samples.png   # Scale-bar diversity examples
-├── models/
-│   └── README.md              # Model download instructions
+│   ├── image_detection/
+│   ├── train_model/
+│   ├── upscale_testn/
+│   └── nanoshape3d.ipynb      # Main notebook
+│    
 ├── test_images/
-│   └── README.md              # Place your .jpg/.png images here
+│   └── .....                  # Place your .jpg/.png images here
+├── configs/
+│   └── default.yaml
+│
+├── src/
+│   ├── cellpose_segmenter.py
+│   ├── clip_kmeans.py
+│   ├── extractor.py
+│   ├── io_utils.py
+│   └── hunyuan_generator.py     
 ├── results/                   # Output meshes (.glb) saved here
 ├── requirements.txt
 ├── environment.yml
@@ -157,10 +160,10 @@ Output `.glb` meshes are saved to `results/` and can be viewed in any GLTF-compa
 
 | Model | Purpose | Download |
 |-------|---------|---------|
-| `cellpose_sam_aug_epoch_0045` | Nanoparticle instance segmentation | [Google Drive](https://drive.google.com/drive/folders/1KizYc5lkyL1itwhEmZ9SBDKix-O9tZ8Q?usp=sharing) |
+| `cellpose_sam_aug_epoch_0045` | Nanoparticle instance segmentation | [Google Drive](https://drive.google.com/drive/folders/1_BiaUYQJzfZkWQI8c4XeCOEvUwOrEMzr?usp=sharing) |
 | `tencent/Hunyuan3D-2` | Single-view 3D mesh generation | [HuggingFace Hub](https://huggingface.co/tencent/Hunyuan3D-2) |
 | YOLO26 scale-bar detector | Scale-bar localisation | Included in Google Drive folder above |
-| Fine-tuned PaddleOCR | Scale-bar text recognition | Included in Google Drive folder above |
+| Fine-tuned PaddleOCR | Scale-bar text recognition | Included in Google Drive folder above | 
 
 ---
 
@@ -186,7 +189,7 @@ If you use NanoShape3D in your research, please cite:
   title   = {NanoShape3D: Automated 3D Morphology Reconstruction System
              for Nanomaterials from Single 2D Electron Microscopy Images},
   author  = {Lutskiy, Pavel and Razlivina, Julia},
-  year    = {2025},
+  year    = {2026},
   institution = {Center for AI in Chemistry, ITMO University}
 }
 ```
