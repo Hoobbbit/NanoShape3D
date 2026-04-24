@@ -1,0 +1,36 @@
+# configs/default.yaml
+# NanoShape3D  —  default pipeline configuration
+# Override any value from the CLI: python scripts/run_pipeline.py --steps 30
+
+# ── Input ──────────────────────────────────────────────────────────────────
+image_dir:  test_images   # directory containing microscopy images
+image_ext:  .jpg          # file extension to glob for
+
+# ── Output ─────────────────────────────────────────────────────────────────
+results_dir: results      # all artefacts land here:
+                          #   results/cutouts/
+                          #   results/meshes/
+                          #   results/visualisations/
+
+# ── Segmentation (Cellpose) ─────────────────────────────────────────────────
+cellpose_model: cellpose_sam_aug_epoch_0045   # path or name of checkpoint
+cellpose_gpu:   true
+cellpose_niter: 1000
+
+# ── Cutout extraction ───────────────────────────────────────────────────────
+min_pixels: 100           # discard objects smaller than this many pixels
+
+# ── Clustering (CLIP + KMeans) ──────────────────────────────────────────────
+clip_model: openai/clip-vit-large-patch14
+max_k:      20            # upper bound on the number of clusters searched
+
+# ── 3-D generation (Hunyuan3D-2) ────────────────────────────────────────────
+hunyuan_model:     tencent/Hunyuan3D-2
+hunyuan_subfolder: hunyuan3d-dit-v2-0-turbo   # 'hunyuan3d-dit-v2-0' for full quality
+num_inference_steps: 5                         # 5 = turbo / 30 = full quality
+mc_algo:     mc
+seed:        12345
+remove_background: false   # set true if input images are NOT already RGBA cutouts
+
+# ── Misc ────────────────────────────────────────────────────────────────────
+save_visualisations: true
